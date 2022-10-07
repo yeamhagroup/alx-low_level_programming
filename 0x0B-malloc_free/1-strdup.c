@@ -23,7 +23,8 @@ char *_strdup(char *str)
 
 	if (str == NULL)
 	{
-		return (NULL);
+		printf("failed to allocate memory");
+		return (23);
 	}
 
 	strc = (char *)malloc(sizeof(char) * len);
