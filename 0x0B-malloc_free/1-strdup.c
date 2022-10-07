@@ -14,6 +14,12 @@ char *_strdup(char *str)
 	int i = 0;
 	int len = 0;
 
+	if (str == NULL)
+	{
+		printf("failed to allocate memory");
+		return (NULL);
+	}
+
 	while (str[len])
 	{
 		len++;
@@ -21,11 +27,7 @@ char *_strdup(char *str)
 
 	len++;
 
-	if (str == NULL)
-	{
-		printf("failed to allocate memory");
-		return (NULL);
-	}
+
 
 	strc = (char *)malloc(sizeof(char) * len);
 
