@@ -2,7 +2,7 @@
 
 
 /**
- * argstostr - A function that concatenates all arguments of your program at run time
+ * argstostr - concatenates all arguments of your program at run time
  * @auc: number of arguments passed
  * @av: array containing arguments passed
  * Return: A pointer to string that containing all arguments
