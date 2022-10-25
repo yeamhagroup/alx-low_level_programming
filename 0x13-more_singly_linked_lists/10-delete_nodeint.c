@@ -1,57 +1,40 @@
-#include <stdlib.h>
 #include "lists.h"
 
 /**
- * _listint_len - returns the number of elements in a linked listint_t list.
- * @h: linked list type listint_t
- * Return: the number of nodes
- */
-size_t _listint_len(const listint_t *h)
-{
-	unsigned int count = 0;
-
-	while (h)
-	{
-		count++;
-		h = h->next;
-	}
-
-	return (count);
-}
-
-/**
- * delete_nodeint_at_index - deletes the node at index index of a listint_t.
- * @head: linked lists
- * @index: index to linked list
- * Return: 1 success or -1 failed
+ * delete_nodeint_at_index - deletes a node in a linked list at a certain index
+ * @head: pointer to the first element in the list
+ * @index: index of the node to delete
+ *
+ * Return: 1 (Success), or -1 (Fail)
  */
 int delete_nodeint_at_index(listint_t **head, unsigned int index)
 {
+	listint_t *temp = *head;
+	listint_t *current = NULL;
 	unsigned int i = 0;
-	listint_t *tmp = *head, *node;
 
-	if (index > _listint_len(*head))
+	if (*head == NULL)
 		return (-1);
 
-	if (tmp &&  index == 0)
+	if (index == 0)
 	{
-		*head = tmp->next;
-		free(tmp);
+		*head = (*head)->next;
+		free(temp);
 		return (1);
 	}
 
-	while (tmp && i < index)
+	while (i < index - 1)
 	{
-		node = tmp;
-		tmp = tmp->next;
+		if (!temp || !(temp->next))
+			return (-1);
+		temp = temp->next;
 		i++;
 	}
 
-	if (!tmp)
-		return (-1);
 
-	node->next = tmp->next;
-	free(tmp);
+	current = temp->next;
+	temp->next = current->next;
+	free(current);
 
 	return (1);
 }
