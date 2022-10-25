@@ -3,55 +3,59 @@
 #include <stdio.h>
 
 /**
- * find_listint_loop_pl - finds a loop in a linked list
+ * _r - reallocates memory for an array of pointers
+ * to the nodes in a linked list
+ * @list: the old list to append
+ * @size: size of the new list (always one more than the old list)
+ * @new: new node to add to the list
  *
- * @head: linked list to search
- *
- * Return: address of node where loop starts/returns, NULL if no loop
+ * Return: pointer to the new list
  */
-listint_t *find_listint_loop_pl(listint_t *head)
+const listint_t **_r(const listint_t **list, size_t size, const listint_t *new)
 {
-	listint_t *ptr, *end;
+	const listint_t **newlist;
+	size_t i;
 
-	if (head == NULL)
-		return (NULL);
-
-	for (end = head->next; end != NULL; end = end->next)
+	newlist = malloc(size * sizeof(listint_t *));
+	if (newlist == NULL)
 	{
-		if (end == end->next)
-			return (end);
-		for (ptr = head; ptr != end; ptr = ptr->next)
-			if (ptr == end->next)
-				return (end->next);
+		free(list);
+		exit(98);
 	}
-	return (NULL);
+	for (i = 0; i < size - 1; i++)
+		newlist[i] = list[i];
+	newlist[i] = new;
+	free(list);
+	return (newlist);
 }
 
 /**
- * print_listint_safe - prints a linked list, even if it
- * has a loop
+ * print_listint_safe - prints a listint_t linked list.
+ * @head: pointer to the start of the list
  *
- * @head: head of list to print
- *
- * Return: number of nodes printed
+ * Return: the number of nodes in the list
  */
 size_t print_listint_safe(const listint_t *head)
 {
-	size_t len = 0;
-	int loop;
-	listint_t *loopnode;
+	size_t i, num = 0;
+	const listint_t **list = NULL;
 
-	loopnode = find_listint_loop_pl((listint_t *) head);
-
-	for (len = 0, loop = 1; (head != loopnode || loop) && head != NULL; len++)
+	while (head != NULL)
 	{
-		printf("[%p] %d\n", (void *) head, head->n);
-		if (head == loopnode)
-			loop = 0;
+		for (i = 0; i < num; i++)
+		{
+			if (head == list[i])
+			{
+				printf("-> [%p] %d\n", (void *)head, head->n);
+				free(list);
+				return (num);
+			}
+		}
+		num++;
+		list = _r(list, num, head);
+		printf("[%p] %d\n", (void *)head, head->n);
 		head = head->next;
 	}
-
-	if (loopnode != NULL)
-		printf("-> [%p] %d\n", (void *) head, head->n);
-	return (len);
+	free(list);
+	return (num);
 }
